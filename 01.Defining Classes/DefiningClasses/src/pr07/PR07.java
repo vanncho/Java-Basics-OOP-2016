@@ -118,7 +118,7 @@ public class PR07 {
         LinkedHashMap<String, Engine> engineData = new LinkedHashMap<>();
 
         for (int i = 0; i < engines; i++) {
-            String[] engineTokens = reader.readLine().split("[\\s]+");
+            String[] engineTokens = reader.readLine().trim().split("[\\s]+");
             String model = engineTokens[0];
             int power = Integer.parseInt(engineTokens[1]);
             int displacement;
@@ -152,7 +152,7 @@ public class PR07 {
         Car[] carData = new Car[cars];
 
         for (int i = 0; i < cars; i++) {
-            String[] carTokens = reader.readLine().split("[\\s]+");
+            String[] carTokens = reader.readLine().trim().split("[\\s]+");
             String model = carTokens[0];
             String engine = carTokens[1];
             int weight;

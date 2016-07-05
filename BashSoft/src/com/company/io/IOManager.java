@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class IOManager {
-    public void traverseDirectory(int depth){
+    public String traverseDirectory(int depth){
         LinkedList<File> subFolders = new LinkedList<>();
         String path = getCurrentDirectoryPath();
         int initialIndentation = path.split("\\\\").length;
@@ -40,6 +40,7 @@ public class IOManager {
             }
 
         }
+        return path;
     }
 
     public void createDirectoryInCurrentFolder(String name){

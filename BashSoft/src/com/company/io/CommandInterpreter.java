@@ -1,5 +1,7 @@
 package com.company.io;
 
+import com.company.exceptions.InvalidInputException;
+import com.company.io.commands.*;
 import com.company.judge.Tester;
 import com.company.network.DownloadManager;
 import com.company.repository.StudentRepository;
@@ -25,10 +27,10 @@ public class CommandInterpreter {
 
     public void interpretCommand(String input) throws IOException {
         String[] data = input.split("\\s+");
-        String command = data[0].toLowerCase();
+        String commandName = data[0].toLowerCase();
 
         try{
-            parseCommand(input, data, command);
+            parseCommand(input, data, commandName);
         } catch (IllegalArgumentException iae){
             OutputWriter.displayException(iae.getMessage());
         } catch (StringIndexOutOfBoundsException sioobe){
@@ -40,67 +42,38 @@ public class CommandInterpreter {
         }
     }
 
-    private void parseCommand(String input, String[] data, String command) throws IOException {
+    private Command parseCommand(String input, String[] data, String command) throws IOException {
         switch (command){
             case "open":
-                this.tryOpenFile(input, data);
-                break;
-
+                return new OpenFileCommand(input, data, this.studentRepository, this.tester, this.ioManager, this.downloadManager);
             case "mkdir":
-                this.tryCreateDirectory(input, data);
-                break;
-
+                return new MakeDirectoryCommand(input, data, this.studentRepository, this.tester, this.ioManager, this.downloadManager);
             case "ls":
-                this.tryTraverseFolders(input, data);
-                break;
-
+                return new TraverseFoldersCommand(input, data, this.studentRepository, this.tester, this.ioManager, this.downloadManager);
             case "cmp":
-                this.tryCompareFiles(input, data);
-                break;
-
+                return new CompareFilesCommand(input, data, this.studentRepository, this.tester, this.ioManager, this.downloadManager);
             case "cdrel":
-                this.tryChangeRelativePath(input, data);
-                break;
-
+                return new ChangeRelativePathCommand(input, data, this.studentRepository, this.tester, this.ioManager, this.downloadManager);
             case "cdabs":
-                this.tryChangeAbsolutePath(input, data);
-                break;
-
+                return new ChangeAbsolutePathCommand(input, data, this.studentRepository, this.tester, this.ioManager, this.downloadManager);
             case "readdb":
-                this.tryReadDatabaseFromFile(input, data);
-                break;
-
+                return new ReadDatabaseFromFileCommand(input, data, studentRepository, tester, ioManager, downloadManager);
             case "dropdb":
-                this.tryDropDatabase(input, data);
-                break;
-
+                return new DropDatabaseCommand(input, data, studentRepository, tester, ioManager, downloadManager);
             case "help":
-                this.tryGetHelp(input, data);
-                break;
-
+                return new GetHelpCommand(input, data, studentRepository, tester, ioManager, downloadManager);
             case "show":
-                this.tryShowWantedCourse(input, data);
-                break;
-
+                return new ShowWantedCourseCommand(input, data, studentRepository, tester, ioManager, downloadManager);
             case "filter":
-                this.tryPrintFilteredStudents(input, data);
-                break;
-
+                return new PrintFilteredStudentsCommand(input, data, studentRepository, tester, ioManager, downloadManager);
             case "order":
-                this.tryPrintOrderedStudents(input, data);
-                break;
-
+                return new PrintOrderedStudentsCommand(input, data, studentRepository, tester, ioManager, downloadManager);
             case "download":
-                this.tryDownloadFile(input, data);
-                break;
-
+                return new DownloadFileCommand(input, data, studentRepository, tester, ioManager, downloadManager);
             case "downloadasynch":
-                this.tryDownloadFileOnNewThread(input, data);
-                break;
-
+                return new DownloadAsynchCommand(input, data, studentRepository, tester, ioManager, downloadManager);
             default:
-                this.displayInvalidCommandMessage(input);
-                break;
+                throw new InvalidInputException(input);
         }
     }
 
